@@ -1,0 +1,34 @@
+# serverless.yml
+service: catfacts
+
+# lock us to a pre-2.0 (not yet released) version of the serverless framework to protect us from breaking changes
+frameworkVersion: ">=1.16.0 <2.0.0"
+
+# pick our language and provider, this is automatically filled in by the template
+provider:
+  name: aws
+  runtime: python3.6
+
+package:
+  include:
+    - common/**
+    - show.py
+    - catfacts.json
+  exclude:
+    - requirements.txt
+    - serverless.yml
+    - README.md
+    - LICENSE.txt
+
+# now the good stuff: we can define our functions here
+functions:
+  show:
+    # the "show" part of show.handler is the file,
+    # and "handler" indicates the function
+    handler: show.handler
+    events:
+      - http:
+          # instead of / you can define any HTTP path you like
+          # since we just have one endpoint I used /
+          path: /
+          method: get
